@@ -47,6 +47,7 @@ imageConfiguration = {
   'ant',            'whale',        'ray',          	'hippopotamus',     'fly'           'crocodile';
   'wasp',           'toucan',       'lobster',          'raven',            'giraffe',      'cow';
   'starfish',       'rooster',      'praying_mantis',   'lioness',          'grasshopper',  'cat';
+<<<<<<< HEAD
   'armadillo',      'pigeon',       'penguin',          'hummingbird',      'goose',        'barn_owl';
   'scorpion',       'oyster',       'ostrich',          'horse',            'dromedary',    'dragonfly'
   }
@@ -70,6 +71,31 @@ imageConfiguration = {
   'manatee',	'butterfly',	'bee',      'sparrow',      'hen',          'termite';
   'dolphin',	'mussel', 		'cheetah',  'tiger',        'pelican',      'turtle';
   'kiwi',       'tapir',        'partridge','elephant',     'owl',          'mosquito'
+=======
+  'barn_owl',       'pigeon',       'penguin',          'hummingbird',      'goose',        'armadillo';
+  'scorpion',       'oyster',       'ostrich',          'horse',            'dromedary',    'dragonfly'
+  }
+  { % imagesA 	INTERFERENCE
+  'goose',       	'dromedary', 	'cat',              'starfish',			'rooster', 		'pigeon';
+  'barn_owl',      	'dragonfly',   	'armadillo',        'ostrich',      	'horse',    	'penguin';
+  'grasshopper',	'whale',  		'scorpion',         'ray',      		'ant',  		'oyster';
+  'hippopotamus', 	'wasp',   		'cow',              'praying_mantis',	'crocodile',	'raven';
+  'lioness',		'fly',   		'lobster',          'giraffe',        	'hummingbird',  'toucan'
+  }}
+  {{ % imagesB 	LEARNING
+  'sparrow',    'tiger',        'seagull',	'owl',          'partridge',    'cheetah';
+  'zebra',      'pelican',      'dolphin',	'mussel',       'kiwi'          'butterfly';
+  'turtle',     'ladybird',     'rhino',	'mosquito',     'tapir',        'beetle';
+  'elephant',   'platypus',     'pomfret',	'manatee',      'crab',         'bee';
+  'termite',   	'hen',          'kangaroo',	'killer_whale', 'duck',         'bat'
+  }
+  { % imagesB 	INTERFERENCE
+  'rhino',		'killer_whale',	'duck',     'kangaroo',     'tiger',		'seagull';
+  'beetle',		'crab',			'pomfret',  'platypus',     'bat'           'zebra';
+  'kiwi',		'tapir',		'sparrow',  'bee',          'partridge',    'termite';
+  'dolphin',	'mussel', 		'elephant', 'hen',          'pelican',      'mosquito';
+  'butterfly',	'manatee',      'ladybird', 'owl',          'cheetah',      'turtle'
+>>>>>>> master
   }}
 };
 
@@ -86,11 +112,19 @@ imageConfiguration = {
 % Image Sequences for Image Set A
 % Sequence 1: Learning
 imageSequenceMainLearningA = {
+<<<<<<< HEAD
     'penguin', 'crocodile', 'raven', 'armadillo', 'fly', 'oyster', ...
 	'starfish', 'dragonfly', 'rooster', 'cow', 'ostrich', 'barn_owl', ...
 	'horse', 'lobster', 'pigeon', 'ant', 'giraffe', 'hummingbird', ...
 	'cat', 'wasp', 'dromedary', 'praying_mantis', 'goose', 'hippopotamus', ...
 	'scorpion', 'toucan', 'grasshopper', 'whale', 'lioness', 'ray'
+=======
+    'starfish', 'pigeon', 'armadillo', 'crocodile', 'raven', 'horse', ...
+	'hummingbird', 'lioness', 'lobster', 'penguin', 'dragonfly', 'fly', ...
+	'ostrich', 'ant', 'cow', 'giraffe', 'cat', 'hippopotamus', ...
+	'scorpion', 'whale', 'barn_owl', 'rooster', 'oyster', 'toucan', ...
+	'goose', 'grasshopper', 'wasp', 'praying_mantis', 'dromedary', 'ray'
+>>>>>>> master
     };
 imageSequenceInterferenceLearningA = imageSequenceMainLearningA;
 % Sequence 2: Recall
@@ -107,11 +141,19 @@ imageSequenceMainRecallA = imageSequenceimmediateRecallA;
 % Image Sequence for Image Set B
 % Sequence 1: Learning
 imageSequenceMainLearningB = {
+<<<<<<< HEAD
     'owl', 'kangaroo', 'butterfly', 'turtle', 'pomfret', 'cheetah', ...
 	'killer_whale', 'seagull', 'duck', 'mosquito', 'bat', 'manatee' ...
 	'tiger', 'crab', 'dolphin', 'bee', 'zebra', 'tapir', ...
 	'hen', 'rhino', 'elephant', 'termite', 'kiwi', 'ladybird', ...
     'mussel', 'platypus', 'partridge', 'pelican', 'beetle', 'sparrow'
+=======
+    'butterfly', 'beetle', 'mussel', 'hen', 'ladybird', 'cheetah', ...
+	'killer_whale', 'owl', 'mosquito', 'manatee', 'duck', 'dolphin', ...
+	'elephant', 'bee', 'crab', 'tapir', 'pomfret', 'tiger', ...
+	'zebra', 'seagull', 'termite', 'rhino', 'turtle', 'partridge', ...
+	'kangaroo', 'kiwi', 'sparrow', 'pelican', 'platypus', 'bat'
+>>>>>>> master
     };
 imageSequenceInterferenceLearningB = imageSequenceMainLearningB;
 % Sequence 2: Recall
@@ -132,6 +174,7 @@ textControl = { ...
     'Zählaufgabe'
     ''
     'Im Folgenden sehen Sie ein Feld voller grauer Karten.'
+<<<<<<< HEAD
     'In einem "Durchgang" verändert sich immer zuerst die'
     'obere Karte. Dann verändert sich die untere Karte.'
     ''
@@ -139,6 +182,14 @@ textControl = { ...
     'Zählen Sie, wie viele Durchgänge durchlaufen werden.' 
     'Schauen Sie dabei stets ganz entspannt auf den'
     'Punkt in der Mitte der momentan verdunkelten Karte.'
+=======
+    'Von diesen Karten wird eine bestimmte Anzahl nacheinander'
+    'verdunkelt werden.'
+    ''
+    'Ihre Aufgabe: Zählen Sie, wie viele Karten insgesamt dunkler geworden.'
+    'sind. Schauen Sie dabei jeweils ganz entspannt auf das Kreuz in der Mitte'
+    'der momentan verdunkelten Karte.'
+>>>>>>> master
     ''
 };
 textFixation = { ...
@@ -202,7 +253,12 @@ textLearning2 = { ...
     'Sie müssen dann bei 60% der Karten richtig liegen.'
     ''
     'Ihre Aufgabe: '
+<<<<<<< HEAD
     'Merken Sie sich die Position der Karte.'
+=======
+    'Fixieren Sie die jeweils aufgedeckte Karte und merken '
+    'Sie sich ihre Position. Nachher werden die Positionen abgefragt.'
+>>>>>>> master
     };
 textLearningInterference = { ...
     ''
@@ -243,6 +299,7 @@ textPracticeRecall = { ...
 };
 textQuestion = { ...
     ''
+<<<<<<< HEAD
     ''
     ''
     'Schauen Sie stets ganz entspannt auf die aufgedeckte Karte.'
@@ -253,10 +310,36 @@ textQuestion = { ...
 
 };
 textRecall = { ...
+=======
+    'Jetzt geht es wirklich los!'
+    'Es werden Ihnen nun alle 30 Bilder zwei Mal gezeigt.'
+    ''
+    'Ihre Aufgabe: '
+    'Fixieren Sie jeweils ganz entspannt die aufgedeckte Karte und'
+    'merken Sie sich ihre Position.'
+    ''
+    'Nach dem Lernen folgt eine Abfrage der Positionen. Am Ende bekommen Sie'
+    'mitgeteilt, wie viel Prozent Sie richtig hatten. Die Abfrage wird so'
+    'lange wiederholt, bis Sie bei 60% der Karten richtig liegen.'
+    };
+textRecall = { ...
+    'Abfrage:'
+    'Nun möchten wir von Ihnen wissen, wo die Bilder waren, die Sie VOR dem'
+    'Schlafengehen gelernt haben.'
+    ''
+    'Oben erscheint jeweils das Bild. Fixieren Sie das Kreuz auf der'
+    'verdeckten Karte unter der Sie das Bild vermuten.'
+>>>>>>> master
     ''
     'Nun möchten wir von Ihnen wissen, wo die Bilder waren,'
     'die Sie VOR dem Schlafengehen gelernt haben.'
     ''
+<<<<<<< HEAD
+=======
+    'Ihnen wird diesmal nicht gesagt, ob Sie richtig gelegen haben. Es erscheint'
+    'lediglich ein blauer Punkt auf der geklickten Karte (kein Kreuz oder.'
+    'Häkchen. Am Ende wird Ihnen aber wie bisher gesagt, wie gut sie waren.'
+>>>>>>> master
     ''
     'Oben erscheint wieder jeweils ein Bild.'
     'Schauen Sie bitte kontinuierlich auf den Punkt auf der'
@@ -385,6 +468,7 @@ textBgColor         = [1 1 1]*0.9; % greyish background
 % window              = ;
 
 % Set Timing (seconds)
+<<<<<<< HEAD
 topCardDisplay      = 3;       % Duration image is shown on top Card
 topCardGreyDisplay  = 1;       % Duration top Card is shown in grey
 cardDisplay         = 6;       % Duration memory cards are shown
@@ -399,6 +483,14 @@ if isMRI
 else
 	interTrialInterval  = 4;        
 end
+=======
+topCardDisplay      = 1;    	% Duartion top Card is shown 
+cardDisplay         = 5;     	% Duration memory cards are shown
+cardCrossDisplay    = 5;        % Duration cross is displayed on cards
+cardRecallDisplay   = 1;     	% Duration memory cards are shown
+feedbackDisplay     = 1;        % Duration feedback is shown
+responseTime        = 15;       % Duration allowed to respond (click)
+>>>>>>> master
 % Fixation Task (mt_fixationTask)
 fixationDisplay     = 6 * 60;     % Duration of fixation task
 
