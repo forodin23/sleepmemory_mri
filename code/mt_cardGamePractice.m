@@ -20,6 +20,7 @@ function mt_cardGamePractice(dirRoot, cfg_window)
 
 %% Load parameters specified in mt_setup.m
 load(fullfile(dirRoot, 'setup', 'mt_params.mat'))   % load workspace information and properties
+interTrialInterval = ITImri(randi(length(ITImri)));
 
 %% Set window parameters
 % Specify the display window 
@@ -81,7 +82,21 @@ SessionTime         = {datestr(now, 'HH:MM:SS')};
 % Make texture for fixation image
 imageDot        = Screen('MakeTexture', window, imgDot);
 imageDotSmall   = Screen('MakeTexture', window, imgDotSmall);
+
+% Listen to keyboard event ENTER
+KeyEventCancel  = KbName('return');
+keyVector = zeros(256,1);
+keyVector(KeyEventCancel) = 1;
+KbQueueCreate;
+KbQueueStart;
+
 for iCard = 1: length(cardShown)
+
+    % abort if ENTER was pressed in between
+    [~, ~, ~, lastPress, ~]=KbQueueCheck;
+    if lastPress(KeyEventCancel)
+        break;
+    end
     % Get Trial Time
     TrialTime           = {datestr(now, 'HH:MM:SS.FFF')};
     
@@ -129,8 +144,6 @@ for iCard = 1: length(cardShown)
     % Display the card for a time defined by cardDisplay
     WaitSecs(cardDisplay);
     
-    
-    tic
     % Compute trial performance
     cardFlip            = imageCurrent;
     cardClicked(iCard)  = cardFlip;
@@ -150,11 +163,10 @@ for iCard = 1: length(cardShown)
 
     % Save trial performance
     mt_saveTable(dirRoot, performance)
-    saveTime = toc;
     
     % Time while subjects are allowed to blink
     Screen('Flip', window, flipTime);
-    WaitSecs(interTrialInterval-saveTime);
+    WaitSecs(interTrialInterval);
 end
 
 mt_showText(dirRoot, textPracticeRecall, window);
@@ -188,7 +200,7 @@ for iCard = 1: length(cardShown)
     Screen('Flip', window, flipTime);
     %    Priority(0);
 
-    WaitSecs(cardCrossDisplay);
+    WaitSecs(topCardDisplay);
 %    Priority(MaxPriority(window)); 
     Screen('DrawTexture', window, imageTop, [], topCard);
     Screen('FrameRect', window, frameColor, topCard, frameWidth);
@@ -268,7 +280,6 @@ for iCard = 1: length(cardShown)
     % Display the card for a time defined by cardDisplay
     WaitSecs(cardRecallDisplay);
     
-    tic
     % Compute trial performance
     correct             = (cardShown(iCard) - cardClicked(iCard)) + 1;
     correct(correct~=1) = 0;
@@ -290,12 +301,11 @@ for iCard = 1: length(cardShown)
 
     % Save trial performance
     mt_saveTable(dirRoot, performance)
-    saveTime = toc;
     
     
     % Time while subjects are allowed to blink
     Screen('Flip', window, flipTime);
-    WaitSecs(interTrialInterval-saveTime);
+    WaitSecs(interTrialInterval);
 end
 Screen('Close', imageDot);
 Screen('Close', imageDotSmall);

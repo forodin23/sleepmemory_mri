@@ -29,6 +29,8 @@ function perc_correct = mt_cardGame(dirRoot, cfg_window, iRun, varargin)
 
 %% Load parameters specified in mt_setup.m
 load(fullfile(dirRoot, 'setup', 'mt_params.mat'))   % load workspace information and properties
+interTrialInterval = ITImri(randi(length(ITImri)));
+
 % Load port output for triggers
 loadlibrary('trigger/inpoutx64', 'trigger/inpout32.h')
 port = hex2dec('0378'); % LPT1: 0378 - 037F, 0778 - 077F
@@ -49,8 +51,10 @@ else
 end
 
 %% Initialize variables for measured parameters
-cardShown     	= cardSequence{cfg_dlgs.memvers}{currSesstype}';
-ntrials 		= length(cardShown);
+load(fullfile(dirRoot,'setup','imageSequenceLists.mat'), 'imageSequenceLists')
+
+cardShown     	= imageSequenceLists(iRun, :)';
+ntrials 		= size(cardShown, 1);
 cardClicked  	= zeros(ntrials, 1);
 mouseData    	= zeros(ntrials, 3);
 imageShown 		= cell(ntrials, 1);
@@ -61,7 +65,12 @@ TrialTime 		= cell(ntrials, 1);
 
 
 isinterf        = (cfg_dlgs.sesstype==3) + 1;
-imagesT         = imageConfiguration{cfg_dlgs.memvers}{isinterf}';
+% mix images for control session
+if currSesstype == 6
+    imagesT         = imageConfigurationControl;
+else
+    imagesT         = imageConfiguration{cfg_dlgs.memvers}{isinterf}';
+end
 
 %% Show which session is upcoming
 mt_showText(dirRoot, textSession{currSesstype}, window, 40);
@@ -75,11 +84,18 @@ end
 
 %% Start the game
 % MRI: wait for MRI trigger (5), then start the program
-if isMRI
-	triggerIn = [];
-	while isempty(triggerIn)
-		calllib('inpoutx64', 'Inp32', port)
-	end 
+triggerIn = [];
+triggerTime = 0;
+tic
+while (isempty(triggerIn) || triggerIn ~=5) && triggerTime < 3
+    triggerIn = calllib('inpoutx64', 'Inp32', port);
+    WaitSecs(.01);
+    triggerTime = toc;
+end 
+if triggerIn == 5
+    mt_showText(dirRoot, ['Trigger received with value: ' num2str(triggerIn)], window, 40, 0);
+else
+    warning('Something went wrong while reading in the MRI trigger')
 end
 
 % Get Session Time
@@ -90,7 +106,7 @@ SessionTime(1:ntrials, 1) = SessionTime;
 % Make texture for fixation image
 imageDot        = Screen('MakeTexture', window, imgDot);
 imageDotSmall   = Screen('MakeTexture', window, imgDotSmall);
-for iCard = 1: length(cardShown) 
+for iCard = 1: size(cardShown, 1) 
    
     cardFlip = 0;
     % Get Trial Time
@@ -115,28 +131,7 @@ for iCard = 1: length(cardShown)
     Screen('FillRect', window, cardColors, rects);
     Screen('FrameRect', window, frameColor, rects, frameWidth);
     Screen('Flip', window, flipTime);
-    Priority(0);
-
-    [mouseX, mouseY] = GetMouse(window);
-    % Delay flipping in case of learning and immediate recall for topCardDisplay
-    if ismember(currSesstype, 2:4) && ~isMRI
-        
-		% Send trigger during learning and immediate recall sessions
-		if (cfg_dlgs.odor == 1)
-			calllib('inpoutx64', 'Out32', port, triggerOdorOn{cfg_dlgs.lab})
-		elseif (cfg_dlgs.odor == 0)
-			calllib('inpoutx64', 'Out32', port, triggerPlaceboOn{cfg_dlgs.lab})
-		end
-        
-        WaitSecs(topCardDisplay);
-        if currSesstype == 4
-            ShowCursor(CursorType, window);
-        end
-    else
-        ShowCursor(CursorType, window);
-    end
-    SetMouse(mouseX, mouseY)
-    
+    Priority(0);    
     
     % Define which card will be flipped
     switch currSesstype
@@ -144,7 +139,7 @@ for iCard = 1: length(cardShown)
             % The card with the same image shown on top will be flipped
             cardFlip            = imageCurrent;
             cardClicked(iCard)  = cardFlip; % dummy
-        case {4, 5} % (Immediate) Recall
+        case {4, 5, 6} % (Immediate) Recall
             % OnMouseClick: flip the card
             [cardFlip, mouseData(iCard,:)]	= mt_cardFlip(window, screenOff, ncards_x, cardSize+cardMargin, topCardHeigth, responseTime);
             if cardFlip ~= 0
@@ -188,27 +183,15 @@ for iCard = 1: length(cardShown)
         Screen('Close', imageTop);
         Screen('Close', imageFlip);
         Priority(0);
-
-        % Display the card for a pre-defined time
-        if (currSesstype == 4) || (currSesstype == 5)
-            WaitSecs(cardRecallDisplay);
-        elseif isMRI 
-			% Display time of lower card in recall session
-			if MRIiti(iCard) - reactionTime < 0
-				WaitSecs(reactionTime)
-			else
-				WaitSecs(0.5)
-            end
-		else
-            WaitSecs(cardDisplay);
-        end
     end
-  
-    % If in learning sessions
-    if ismember(currSesstype, 2:4) && ~isMRI
-        % Stop Odor here
-        calllib('inpoutx64', 'Out32', port, 0)   % reset the port to 0 
-    end
+    
+    
+%     % Display time of lower card in recall session
+%     if MRIiti(iCard) - reactionTime < 0
+%         WaitSecs(reactionTime)
+%     else
+%         WaitSecs(0.5)
+%     end
 
     imageShown(iCard) 	= imagesT(iCard);
     if cardClicked(iCard)~=0
@@ -255,7 +238,7 @@ end
 
 % Backup
 fName = ['mtp_sub_' cfg_dlgs.subject '_night_' cfg_dlgs.night '_sess_' num2str(cfg_dlgs.sesstype)];
-copyfile(fullfile(dirRoot, 'DATA', [fName '.*']), fullfile(dirRoot, 'BACKUP'), 'f');
+copyfile(fullfile(dirData, 'DATA', [fName '.*']), fullfile(dirRoot, 'BACKUP'), 'f');
 
 % Housekeeping: unload port library
 unloadlibrary('inpoutx64')
