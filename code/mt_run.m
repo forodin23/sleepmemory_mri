@@ -40,10 +40,6 @@ function mt_run(user)
 % 
 % AUTHOR: Marco Rüth, contact@marcorueth.com
 
-% The MEG laptop does not pass the sync test (yet)
-if strcmp(user, 'MEG')
-    Screen('Preference', 'SkipSyncTests', 1);
-end
 %% PREPARE WORKSPACE & REQUEST USER INPUT
 close all;                  % Close all figures
 clearvars -except user;     % Clear all variables in the workspace
@@ -69,84 +65,63 @@ mt_setupCards(dirRoot, cfg_window);
 %% START GAME   
 switch upper(cfg_cases.sesstype{cfg_dlgs.sesstype})
     
-% CONTROL TASK
-case cfg_cases.sesstype{1}
-    % Show introduction screen
-    mt_showText(dirRoot, textControl, window);
-    mt_showText(dirRoot, textQuestion, window);
-    % Start Control Task
-    for cRun = 1: length(controlList)
-        mt_controlTask(dirRoot, cfg_window, cRun);
-    end
-    
 % MAIN LEARNING and IMMEDIATE RECALL
 case cfg_cases.sesstype{2}
-    Show introduction screen
-    mt_showText(dirRoot, textLearningIntro{1}, window);
-    mt_showText(dirRoot, textLearningIntro{2}, window);
-    % Start practice session
-    mt_cardGamePractice(dirRoot, cfg_window);
-    mt_showText(dirRoot, textLearning2, window);
-    mt_showText(dirRoot, textQuestion, window);
+%     % Show introduction screen
+%     mt_showText(dirRoot, textLearningIntro{1}, window);
+%     mt_showText(dirRoot, textLearningIntro{2}, window);
+%     % Start practice session
+%     mt_cardGamePractice(dirRoot, cfg_window);
+%     mt_showText(dirRoot, textLearning2, window);
+%     mt_showText(dirRoot, textQuestion, window);
     % Start learning sessions
-    for lRun = 1: nLearningSess
-        mt_cardGame(dirRoot, cfg_window, lRun);
-        if lRun < nLearningSess
-            mt_showText(dirRoot, strrep(textLearning2Next, 'XXX', sprintf('%1.f', (lRun+1))), window);
-        end
+    for block = 1: nLearningBlocks
+        mt_cardGame(dirRoot, cfg_window, block, 0, 2);
+        mt_showText(dirRoot, textRecallImmediate, window);
+        perc_correct = mt_cardGame(dirRoot, cfg_window, block, 0, 5);
+        mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
+        mt_showText(dirRoot, strrep(textLearning2Next, 'XXX', sprintf('%1.f', (block+1))), window);
     end
-    mt_showText(dirRoot, textRecallImmediate, window);
-    % Start immediate recall
-    while (iRecall <= nMaxRecall) && ((100*perc_correct < RecallThreshold) || (iRecall <= nMinRecall)) 
-        % Start Experimental Task
-        perc_correct = mt_cardGame(dirRoot, cfg_window, iRecall, 1, 5);
-        if ((100*perc_correct < RecallThreshold) || (iRecall < nMinRecall))
-            mt_showText(dirRoot, strrep(textRecallAgain, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
-        end
-        iRecall = iRecall + 1;
-    end
-    if (iRecall <= nMaxRecall) && (100*perc_correct > RecallThreshold)
-        % Start recall without feedback
-        mt_showText(dirRoot, strrep(textRecallDone, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
-        mt_showText(dirRoot, textRecallNoFeedback, window);
-        perc_correct = mt_cardGame(dirRoot, cfg_window, iRecall, 0, 5);
-        mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);        
-    elseif (iRecall > nMaxRecall)
-        warning(['Maximum number of recall (' num2str(nMaxRecall) ') runs reached. Experiment cancelled.'])
-        % Show final screen
-        mt_showText(dirRoot, textOutro, window);
-        sca;
-    end
+    % Show final screen
+    mt_showText(dirRoot, textOutro, window);
+    sca;
 
-% INTERFERENCE LEARNING and IMMEDIATE RECALL
+% INTERFERENCE BLOCKS
 case cfg_cases.sesstype{3}
     % Show introduction screen
     mt_showText(dirRoot, textLearningInterference, window);
     mt_showText(dirRoot, textQuestion, window);
-    % Start learning sessions
-    for lRun = 1: nLearningSess
-        mt_cardGame(dirRoot, cfg_window, lRun);
-        if lRun < nLearningSess
-            mt_showText(dirRoot, strrep(textLearning2Next, 'XXX', sprintf('%1.f', (lRun+1))), window);
-        end        
+    % Start interference sessions
+    for block = 1: nInterferenceBlocks
+        mt_cardGame(dirRoot, cfg_window, block, 0, 3);
+        mt_showText(dirRoot, textRecallImmediate, window);
+        perc_correct = mt_cardGame(dirRoot, cfg_window, block, 0, 5);
+        mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
+        mt_showText(dirRoot, strrep(textLearning2Next, 'XXX', sprintf('%1.f', (block+1))), window);
     end
-    % Start immediate recall
-    mt_showText(dirRoot, textRecallInterference, window);
-    perc_correct = mt_cardGame(dirRoot, cfg_window, iRecall, 0, 4);
+    mt_showText(dirRoot, textLearning2, window);
+    mt_showText(dirRoot, textQuestion, window);
+    % Start recall session for content of first learning session 
+    mt_showText(dirRoot, textRecallImmediate, window);
+    perc_correct = mt_cardGame(dirRoot, cfg_window, 1, 0, 5);
     mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
+    % Show final screen
+    mt_showText(dirRoot, textOutro, window);
+    sca;
     
-% FINAL RECALL
+% CONTROL BLOCKS
 case cfg_cases.sesstype{4}
     % Show introduction screen
-    mt_showText(dirRoot, textRecall, window);
-    mt_showText(dirRoot, textRecall2, window);
+    mt_showText(dirRoot, textLearningControl, window);
     mt_showText(dirRoot, textQuestion, window);
-    while (iRecall <= nFinalRecall) 
-        % Start Experimental Task
-        perc_correct = mt_cardGame(dirRoot, cfg_window, iRecall, 0, 5);
-        iRecall = iRecall + 1;
-        mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
-    end
+    mt_controlTask(dirRoot, cfg_window);
+    % Start recall session for content of first learning session 
+    mt_showText(dirRoot, textRecallImmediate, window);
+    perc_correct = mt_cardGame(dirRoot, cfg_window, 1, 0, 6);
+    mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
+    % Show final screen
+    mt_showText(dirRoot, textOutro, window);
+    sca;
     
 % ERROR CASE
 case cfg_cases.sesstype{5}
