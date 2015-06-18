@@ -70,10 +70,10 @@ case cfg_cases.sesstype{2}
 %     % Show introduction screen
 %     mt_showText(dirRoot, textLearningIntro{1}, window);
 %     mt_showText(dirRoot, textLearningIntro{2}, window);
-%     % Start practice session
-%     mt_cardGamePractice(dirRoot, cfg_window);
-%     mt_showText(dirRoot, textLearning2, window);
-%     mt_showText(dirRoot, textQuestion, window);
+    % Start practice session
+    mt_cardGamePractice(dirRoot, cfg_window);
+    mt_showText(dirRoot, textLearning2, window);
+    mt_showText(dirRoot, textQuestion, window);
     % Start learning sessions
     for block = 1: nLearningBlocks
         mt_cardGame(dirRoot, cfg_window, block, 0, 2);

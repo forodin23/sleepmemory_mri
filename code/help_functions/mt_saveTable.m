@@ -61,10 +61,9 @@ end
 
 Feedback            = {feedbackOn};
 MemoryVersion       = cfg_cases.memvers(cfg_dlgs.memvers);
-Odor                = {cfg_dlgs.odor};
 
 tableLeft   = table(SessionDate, SessionTime, Lab, ExperimentName, Subject, Session, ...
-    Feedback, MemoryVersion, Odor, Accuracy);
+    Feedback, MemoryVersion, Accuracy);
 tableLeft   = repmat(tableLeft, nRuns, 1);
 
 % Changing variables
