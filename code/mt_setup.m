@@ -376,16 +376,16 @@ textBgColor         = [1 1 1]*0.9; % greyish background
 % window              = ;
 
 % Set Timing (seconds)
-topCardDisplay      = .3;       % Duration image is shown on top Card
-topCardGreyDisplay  = .1;       % Duration top Card is shown in grey
-cardDisplay         = .4;       % Duration memory cards are shown
-cardRecallDisplay   = .1;       % Duration memory cards are shown
-feedbackDisplay     = .1;       % Duration feedback is shown
-whiteScreenDisplay  = .1;       % Delay after text screen
-responseTime        = .2;      % Duration allowed to respond (click)
+topCardDisplay      = 3;       % Duration image is shown on top Card
+topCardGreyDisplay  = 1;       % Duration top Card is shown in grey
+cardDisplay         = 4;       % Duration memory cards are shown
+cardRecallDisplay   = 1;       % Duration memory cards are shown
+feedbackDisplay     = 1;       % Duration feedback is shown
+whiteScreenDisplay  = 1;       % Delay after text screen
+responseTime        = 2;       % Duration allowed to respond (click)
 % ITI is defined below in "ITImri"
 % Fixation Task (mt_fixationTask)
-fixationDisplay     = .6 * 60;     % Duration of fixation task
+fixationDisplay     = 6 * 60;     % Duration of fixation task
 
 
 %% ======================= DO NOT CHANGE FROM HERE ====================== %

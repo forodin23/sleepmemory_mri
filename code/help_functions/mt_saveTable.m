@@ -38,6 +38,7 @@ end
 
 ntrials = length(performance.SessionTime);
 % Constant variables
+MRIStart            = performance.MRITrigger(1);
 SessionDate         = {datestr(now, 'yyyy/mm/dd')};
 SessionTime         = performance.SessionTime(1);
 Lab                 = cfg_cases.lab(cfg_dlgs.lab);
@@ -62,7 +63,7 @@ end
 Feedback            = {feedbackOn};
 MemoryVersion       = cfg_cases.memvers(cfg_dlgs.memvers);
 
-tableLeft   = table(SessionDate, SessionTime, Lab, ExperimentName, Subject, Session, ...
+tableLeft   = table(MRIStart, SessionDate, SessionTime, Lab, ExperimentName, Subject, Session, ...
     Feedback, MemoryVersion, Accuracy);
 tableLeft   = repmat(tableLeft, nRuns, 1);
 

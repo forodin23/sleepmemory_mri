@@ -67,18 +67,25 @@ switch upper(cfg_cases.sesstype{cfg_dlgs.sesstype})
     
 % MAIN LEARNING and IMMEDIATE RECALL
 case cfg_cases.sesstype{2}
-%     % Show introduction screen
-%     mt_showText(dirRoot, textLearningIntro{1}, window);
-%     mt_showText(dirRoot, textLearningIntro{2}, window);
+    % Show introduction screen
+    mt_showText(dirRoot, textLearningIntro{1}, window);
+    mt_showText(dirRoot, textLearningIntro{2}, window);
     % Start practice session
     mt_cardGamePractice(dirRoot, cfg_window);
     mt_showText(dirRoot, textLearning2, window);
-    mt_showText(dirRoot, textQuestion, window);
+    mt_showText(dirRoot, textQuestion, window, 0, 2);
+    Screen('Flip', window, flipTime);
+    
+    % wait for MRI trigger ('w')
+    timeStartExp = mt_MRITrigger();
+    
     % Start learning sessions
     for block = 1: nLearningBlocks
-        mt_cardGame(dirRoot, cfg_window, block, 0, 2);
+        % LEARNING
+        mt_cardGame(dirRoot, cfg_window, block, timeStartExp, 0, 2);
         mt_showText(dirRoot, textRecallImmediate, window);
-        perc_correct = mt_cardGame(dirRoot, cfg_window, block, 0, 5);
+        % IMMEDIATE RECALLL
+        perc_correct = mt_cardGame(dirRoot, cfg_window, block, timeStartExp, 0, 5);
         mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
         mt_showText(dirRoot, strrep(textLearning2Next, 'XXX', sprintf('%1.f', (block+1))), window);
     end
@@ -90,12 +97,17 @@ case cfg_cases.sesstype{2}
 case cfg_cases.sesstype{3}
     % Show introduction screen
     mt_showText(dirRoot, textLearningInterference, window);
-    mt_showText(dirRoot, textQuestion, window);
+    mt_showText(dirRoot, textQuestion, window, 0, 2);
+    Screen('Flip', window, flipTime);
+    
+    % wait for MRI trigger ('w')
+    timeStartExp = mt_MRITrigger();
+    
     % Start interference sessions
     for block = 1: nInterferenceBlocks
-        mt_cardGame(dirRoot, cfg_window, block, 0, 3);
+        mt_cardGame(dirRoot, cfg_window, block, timeStartExp, 0, 3);
         mt_showText(dirRoot, textRecallImmediate, window);
-        perc_correct = mt_cardGame(dirRoot, cfg_window, block, 0, 5);
+        perc_correct = mt_cardGame(dirRoot, cfg_window, block, timeStartExp, 0, 5);
         mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
         mt_showText(dirRoot, strrep(textLearning2Next, 'XXX', sprintf('%1.f', (block+1))), window);
     end
@@ -103,7 +115,7 @@ case cfg_cases.sesstype{3}
     mt_showText(dirRoot, textQuestion, window);
     % Start recall session for content of first learning session 
     mt_showText(dirRoot, textRecallImmediate, window);
-    perc_correct = mt_cardGame(dirRoot, cfg_window, 1, 0, 5);
+    perc_correct = mt_cardGame(dirRoot, cfg_window, 1, timeStartExp, 0, 5);
     mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
     % Show final screen
     mt_showText(dirRoot, textOutro, window);
@@ -113,11 +125,16 @@ case cfg_cases.sesstype{3}
 case cfg_cases.sesstype{4}
     % Show introduction screen
     mt_showText(dirRoot, textLearningControl, window);
-    mt_showText(dirRoot, textQuestion, window);
+    mt_showText(dirRoot, textQuestion, window, 0, 2);
+    Screen('Flip', window, flipTime);
+    
+    % wait for MRI trigger ('w')
+    timeStartExp = mt_MRITrigger();
+    
     mt_controlTask(dirRoot, cfg_window);
     % Start recall session for content of first learning session 
     mt_showText(dirRoot, textRecallImmediate, window);
-    perc_correct = mt_cardGame(dirRoot, cfg_window, 1, 0, 6);
+    perc_correct = mt_cardGame(dirRoot, cfg_window, 1, timeStartExp, 0, 6);
     mt_showText(dirRoot, strrep(textRecallPerformance, 'XXX', sprintf('%3.f', (100*perc_correct))), window);
     % Show final screen
     mt_showText(dirRoot, textOutro, window);
@@ -136,4 +153,7 @@ end
 ShowCursor(CursorType, window);
 mt_showText(dirRoot, textOutro, window);
 sca;
+
+
+
 end
