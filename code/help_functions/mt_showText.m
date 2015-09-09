@@ -25,9 +25,9 @@ delayContinue = 0;
  
 if length(varargin) == 1
     textSize = varargin{1};
-elseif length(varargin) == 2 && varargin{2} == 0
+elseif length(varargin) == 2 && isnumeric(varargin{2})
     textSize = textDefSize;
-    delayContinue = 2;
+    delayContinue = varargin{2};
 elseif length(varargin) == 2 && varargin{2} == 1
     textSize = textDefSize;
     delayContinue = 'click';
@@ -47,9 +47,9 @@ else
     DrawFormattedText(window, text, 'center', 'center', textDefColor);
 end
 Screen('TextSize', window, textDefSize);
-if delayContinue == 0
-    DrawFormattedText(window, 'Weiter mit Mausklick...', textSx, windowSize(2)-2*textDefSize, textDefColor);
-end
+% if delayContinue == 0
+%     DrawFormattedText(window, 'Weiter mit Mausklick...', textSx, windowSize(2)-2*textDefSize, textDefColor);
+% end
 
 % Display the text
 Screen('Flip', window); 

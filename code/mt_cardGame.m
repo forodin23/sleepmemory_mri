@@ -1,4 +1,4 @@
-function perc_correct = mt_cardGame(dirRoot, cfg_window, iRun, varargin)
+function perc_correct = mt_cardGame(dirRoot, cfg_window, iRun, timeStartExp, varargin)
 % ** function mt_cardGame(dirRoot, cfg_window, iRun)
 % This function starts the memory task.
 %
@@ -73,7 +73,7 @@ else
 end
 
 %% Show which session is upcoming
-mt_showText(dirRoot, textSession{currSesstype}, window, 40);
+mt_showText(dirRoot, textSession{currSesstype}, window, 40, 2);
 % Short delay after the mouse click to avoid motor artifacts
 HideCursor(window);
 Screen('Flip', window, flipTime);
@@ -216,6 +216,7 @@ Screen('Close', imageDotSmall);
 
 %% Performance    
 % Save session performance
+MRITrigger(1:ntrials, 1) = timeStartExp;
 session             = zeros(ntrials, 1);
 run                 = zeros(ntrials, 1);
 session(1:ntrials, 1) = currSesstype;
@@ -226,7 +227,7 @@ correct(correct~=1) = 0; % set others incorrect
 % save cards shown, cards clicked, mouse click x/y coordinates, reaction time
 accuracy            = 100 * mean(correct);
 % save session data
-performance         = table(SessionTime, TrialTime, session, run, correct, imageShown, imageClicked,  mouseData, coordsShown, coordsClicked);
+performance         = table(MRITrigger, SessionTime, TrialTime, session, run, correct, imageShown, imageClicked,  mouseData, coordsShown, coordsClicked);
 mt_saveTable(dirRoot, performance, feedbackOn, accuracy)
 
 % Return performance for recall session
@@ -235,10 +236,6 @@ if (currSesstype == 4) || (currSesstype == 5)
 else
     perc_correct    	= 1;
 end
-
-% Backup
-fName = ['mtp_sub_' cfg_dlgs.subject '_night_' cfg_dlgs.night '_sess_' num2str(cfg_dlgs.sesstype)];
-copyfile(fullfile(dirData, 'DATA', [fName '.*']), fullfile(dirRoot, 'BACKUP'), 'f');
 
 % Housekeeping: unload port library
 unloadlibrary('inpoutx64')

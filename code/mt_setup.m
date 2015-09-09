@@ -382,7 +382,7 @@ cardDisplay         = 4;       % Duration memory cards are shown
 cardRecallDisplay   = 1;       % Duration memory cards are shown
 feedbackDisplay     = 1;       % Duration feedback is shown
 whiteScreenDisplay  = 1;       % Delay after text screen
-responseTime        = 2;      % Duration allowed to respond (click)
+responseTime        = 2;       % Duration allowed to respond (click)
 % ITI is defined below in "ITImri"
 % Fixation Task (mt_fixationTask)
 fixationDisplay     = 6 * 60;     % Duration of fixation task
@@ -422,7 +422,7 @@ cfg_cases.subjects  = 0:maxSubjectNr;                   % 0 is debug
 cfg_cases.nights    = {'1', '2'};                       % Night 1 or 2
 cfg_cases.memvers   = {'A', 'B'};                       % Memory version
 cfg_cases.sesstype  = {'C', 'L', 'I', 'R', 'F'};        % Session Type
-cfg_cases.lab       = {'MEG', 'SL3', 'SL4', 'local'};   % Lab/Location
+cfg_cases.lab       = {'MRI', 'local'};                 % Lab/Location
 cfg_cases.odor      = {'0', '1'}; 
 cfg_cases.sessNames = {'Control', 'Learning', 'Interference', ...
     'Recall', 'Recall', 'Fixation'};

@@ -143,34 +143,13 @@ end
 
 % Lab
 switch upper(user)
-    case 'MEG' 
+    case 'MRI' 
         cfg_dlgs.lab    = 1;
-        % TODO: set triggers for MEG
-        % Parallel port trigger in PTB
-        % In the MEG will be the old olfactometer
-    case 'SL3'
-        cfg_dlgs.lab    = 2;
-        triggerOdor     = triggerOdorOn{2}      + EEGtrigger;
-        triggerPlacebo  = triggerPlaceboOn{2}   + EEGtrigger;
-        % In the sleep lab will be the new olfactometer
-    case 'SL4'
-        cfg_dlgs.lab    = 3;
-        triggerOdor     = triggerOdorOn{3}      + EEGtrigger;
-        triggerPlacebo  = triggerPlaceboOn{3}   + EEGtrigger;
-        % In the sleep lab will be the new olfactometer
-        % Only in this lab one can learn and stimulate with odors
     case 0 
         % development mode
-        cfg_dlgs.lab = 1;
+        cfg_dlgs.lab    = 1;
     otherwise
         error('Invalid Lab')
-end
-
-cfg_dlgs.odor = odorTable;
-if strcmp(cfg_dlgs.night, '1')
-    cfg_dlgs.odor = cfg_dlgs.odor{str2double(cfg_dlgs.subject), 'OdorN1'};
-elseif strcmp(cfg_dlgs.night, '2')
-    cfg_dlgs.odor = cfg_dlgs.odor{str2double(cfg_dlgs.subject), 'OdorN2'};
 end
 
 % Choose a control list based on the subject id
